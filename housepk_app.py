@@ -220,6 +220,32 @@ def health():
     }
     return jsonify(status)
 
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Login page for user authentication"""
+    if request.method == "POST":
+        username = request.form.get("username")
+        password = request.form.get("password")
+        # Simple authentication logic (placeholder)
+        if username == "admin" and password == "admin123":
+            return jsonify({"status": "success", "message": "Login successful"})
+        else:
+            return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+    return """
+    <html>
+        <head><title>Login</title></head>
+        <body style="font-family: Arial; padding: 20px;">
+            <h2>Login to House Price Predictor</h2>
+            <form method="POST">
+                <input type="text" name="username" placeholder="Username" required><br><br>
+                <input type="password" name="password" placeholder="Password" required><br><br>
+                <button type="submit">Login</button>
+            </form>
+            <p><small>Hint: admin / admin123</small></p>
+        </body>
+    </html>
+    """
+
 if __name__ == "__main__":
     print("=" * 60)
     print("Pakistan House Price Prediction - Flask Application")
