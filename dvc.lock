@@ -1,0 +1,128 @@
+schema: '2.0'
+stages:
+  prepare:
+    cmd: python src/prepare.py --config params.yaml
+    deps:
+    - path: data/zameen-updated.csv
+      hash: md5
+      md5: 862ce971c086da8903e8ecc7c8a52c92
+      size: 49522076
+    - path: src/prepare.py
+      hash: md5
+      md5: 3ca9151b631c16fe731c3a7b5665f3b4
+      size: 1693
+    params:
+      params.yaml:
+        prepare:
+          input_file: data/zameen-updated.csv
+          output_file: data/house_data_cleaned.csv
+          random_seed: 42
+    outs:
+    - path: data/house_data_cleaned.csv
+      hash: md5
+      md5: b37f82a6833877e6b553ac10f0dd8891
+      size: 49551042
+  features:
+    cmd: python src/features.py --config params.yaml
+    deps:
+    - path: data/house_data_cleaned.csv
+      hash: md5
+      md5: b37f82a6833877e6b553ac10f0dd8891
+      size: 49551042
+    - path: src/features.py
+      hash: md5
+      md5: 60f478057d95ece914f5150bc73a4252
+      size: 2691
+    params:
+      params.yaml:
+        features:
+          test_size: 0.2
+          random_state: 42
+          selected_features:
+          - property_type
+          - city
+          - province_name
+          - latitude
+          - longitude
+          - baths
+          - bedrooms
+          - Area Type
+          - Area Size
+          - Area Category
+          target: price
+    outs:
+    - path: data/X_test.npy
+      hash: md5
+      md5: 341cdc009245f4c0fd864dad402cbc08
+      size: 2666928
+    - path: data/X_train.npy
+      hash: md5
+      md5: d4f51df6c451ca7a4593483c57ee7c3a
+      size: 10667168
+    - path: data/y_test.npy
+      hash: md5
+      md5: 4483e18e526a8fa86ccb784620b67fbb
+      size: 266808
+    - path: data/y_train.npy
+      hash: md5
+      md5: 97a8282ed3033b3671e31b83216f29d8
+      size: 1066832
+    - path: models/feature_names.pkl
+      hash: md5
+      md5: 1363133e7b3319e82d3fe7cc98c3f9c1
+      size: 137
+    - path: models/label_encoders.pkl
+      hash: md5
+      md5: 575a6c7aa94666db2c44c207ecf04f14
+      size: 1869
+  train:
+    cmd: python src/train.py --config params.yaml
+    deps:
+    - path: data/X_train.npy
+      hash: md5
+      md5: d4f51df6c451ca7a4593483c57ee7c3a
+      size: 10667168
+    - path: data/y_train.npy
+      hash: md5
+      md5: 97a8282ed3033b3671e31b83216f29d8
+      size: 1066832
+    - path: src/train.py
+      hash: md5
+      md5: 4f149f378171244cff7ad07b0f690f54
+      size: 1170
+    params:
+      params.yaml:
+        train:
+          n_estimators: 100
+          max_depth: 10
+          min_samples_split: 5
+          random_state: 42
+    outs:
+    - path: models/house_price_model.pkl
+      hash: md5
+      md5: 31060527cd4b5a8fb3525a5971c7db7f
+      size: 9989953
+  evaluate:
+    cmd: python src/evaluate.py --config params.yaml
+    deps:
+    - path: data/X_test.npy
+      hash: md5
+      md5: 341cdc009245f4c0fd864dad402cbc08
+      size: 2666928
+    - path: data/y_test.npy
+      hash: md5
+      md5: 4483e18e526a8fa86ccb784620b67fbb
+      size: 266808
+    - path: models/house_price_model.pkl
+      hash: md5
+      md5: 31060527cd4b5a8fb3525a5971c7db7f
+      size: 9989953
+    - path: src/evaluate.py
+      hash: md5
+      md5: de5bcde7246786a8cf85de2e5409c184
+      size: 1383
+    outs:
+    - path: metrics/eval.json
+      hash: md5
+      md5: 91e24f99273974ea145d121ca1f6590a
+      size: 177

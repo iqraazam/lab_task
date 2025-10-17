@@ -1,15 +1,33 @@
 # params.yaml
 prepare:
+  input_file: data/zameen-updated.csv
+  output_file: data/house_data_cleaned.csv
   random_seed: 42
 
 features:
   test_size: 0.2
   random_state: 42
+  selected_features:
+    - property_type
+    - city
+    - province_name
+    - latitude
+    - longitude
+    - baths
+    - bedrooms
+    - Area Type
+    - Area Size
+    - Area Category
+  target: price
 
 train:
   n_estimators: 100
-  max_depth: 5
+  max_depth: 10
+  min_samples_split: 5
   random_state: 42
 
 evaluate:
-  average: macro
+  metrics:
+    - r2_score
+    - mean_absolute_error
+    - mean_squared_error

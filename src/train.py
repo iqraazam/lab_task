@@ -1,27 +1,40 @@
+"""
+Model Training Script
+Trains a RandomForest Regressor on house price data
+"""
 import argparse
 import os
 import joblib
 import numpy as np
-from sklearn.ensemble import RandomForestClassifier
+from sklearn.ensemble import RandomForestRegressor
 import yaml
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
-    parser.add_argument("--data_dir", type=str, default="data")
-    parser.add_argument("--model_out", type=str, default="model.pkl")
+    parser.add_argument("--config", type=str, default="params.yaml")
     args = parser.parse_args()
 
-    with open("params.yaml") as f:
+    # Load parameters
+    with open(args.config) as f:
         params = yaml.safe_load(f)["train"]
 
-    X_train = np.load(os.path.join(args.data_dir, "X_train.npy"))
-    y_train = np.load(os.path.join(args.data_dir, "y_train.npy"))
+    # Load training data
+    X_train = np.load("data/X_train.npy")
+    y_train = np.load("data/y_train.npy")
+    
+    print(f"Training with {X_train.shape[0]} samples...")
 
-    clf = RandomForestClassifier(
+    # Train RandomForest Regressor
+    model = RandomForestRegressor(
         n_estimators=params["n_estimators"],
         max_depth=params["max_depth"],
-        random_state=params["random_state"]
+        min_samples_split=params["min_samples_split"],
+        random_state=params["random_state"],
+        n_jobs=-1
     )
-    clf.fit(X_train, y_train)
-    joblib.dump(clf, args.model_out)
-    print("Model saved to", args.model_out)
+    model.fit(X_train, y_train)
+    
+    # Save model
+    os.makedirs('models', exist_ok=True)
+    joblib.dump(model, "models/house_price_model.pkl")
+    print("Model saved to models/house_price_model.pkl")
