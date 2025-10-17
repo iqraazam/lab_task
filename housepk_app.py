@@ -220,6 +220,26 @@ def health():
     }
     return jsonify(status)
 
+@app.route("/contact", methods=["GET"])
+def contact():
+    """Contact information page"""
+    return """
+    <html>
+        <head><title>Contact Us</title></head>
+        <body style="font-family: Arial; padding: 20px; background: #f5f5f5;">
+            <div style="max-width: 600px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h1 style="color: #667eea;">Contact House Price Predictor Team</h1>
+                <p><strong>📧 Email:</strong> support@houseprice.pk</p>
+                <p><strong>📱 Phone:</strong> +92-300-1234567</p>
+                <p><strong>📍 Address:</strong> Islamabad, Pakistan</p>
+                <p><strong>🕒 Working Hours:</strong> Mon-Fri, 9 AM - 6 PM</p>
+                <br>
+                <a href="/" style="color: #667eea; text-decoration: none;">← Back to Home</a>
+            </div>
+        </body>
+    </html>
+    """
+
 if __name__ == "__main__":
     print("=" * 60)
     print("Pakistan House Price Prediction - Flask Application")
