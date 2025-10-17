@@ -220,28 +220,22 @@ def health():
     }
     return jsonify(status)
 
-@app.route("/login", methods=["GET", "POST"])
-def login():
-    """Login page for user authentication"""
-    if request.method == "POST":
-        username = request.form.get("username")
-        password = request.form.get("password")
-        # Simple authentication logic (placeholder)
-        if username == "admin" and password == "admin123":
-            return jsonify({"status": "success", "message": "Login successful"})
-        else:
-            return jsonify({"status": "error", "message": "Invalid credentials"}), 401
+@app.route("/contact", methods=["GET"])
+def contact():
+    """Contact information page"""
     return """
     <html>
-        <head><title>Login</title></head>
-        <body style="font-family: Arial; padding: 20px;">
-            <h2>Login to House Price Predictor</h2>
-            <form method="POST">
-                <input type="text" name="username" placeholder="Username" required><br><br>
-                <input type="password" name="password" placeholder="Password" required><br><br>
-                <button type="submit">Login</button>
-            </form>
-            <p><small>Hint: admin / admin123</small></p>
+        <head><title>Contact Us</title></head>
+        <body style="font-family: Arial; padding: 20px; background: #f5f5f5;">
+            <div style="max-width: 600px; margin: 50px auto; background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+                <h1 style="color: #667eea;">Contact House Price Predictor Team</h1>
+                <p><strong>📧 Email:</strong> support@houseprice.pk</p>
+                <p><strong>📱 Phone:</strong> +92-300-1234567</p>
+                <p><strong>📍 Address:</strong> Islamabad, Pakistan</p>
+                <p><strong>🕒 Working Hours:</strong> Mon-Fri, 9 AM - 6 PM</p>
+                <br>
+                <a href="/" style="color: #667eea; text-decoration: none;">← Back to Home</a>
+            </div>
         </body>
     </html>
     """
